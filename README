@@ -1,0 +1,28 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=886
+
+" Format-block (do a 'gq' format) on the comment the cursor is in; the type of
+" comment is determined by context (i.e., /*...*/, //..., #..., etc.).
+"
+" EXAMPLE SETUP
+"	map gqc :call FormatComment()<CR>
+
+DEPENDENCIES:
+   FormatBlock.vim ( vimscript #885 )
+
+My *actual* setup is:
+
+" gqc - Format comment; comment-type is determined by context (i.e., /*...*/,
+"       //..., #..., etc.).
+"
+" NOTE: This will probably not work properly in C source for vim versions prior
+"       to 6 because some of the search-patterns used are more advanced than
+"       were available prior to version 6.
+exe SILENT . 'map <unique> gqc :call FormatComment()<CR>'
+
+Where SILENT is set to '' or 'silent! ', depending upon vim's version (does it have silent?)
+
+There is some stuff in there to handle our organization's "standard function header" comments specially; that 'if' block should be easily located and removed, or modified to your tastes.  If left as-is, you probably wouldn't trigger it anyway (so I left it in there as an example/template).
+
+Also, we use the convention that single-line 'C' comments should use the //-style, while multi-line comments should use the /*...*/-style; so that's built into the function.  i.e., If a long //-style comment gets formatted onto multiple lines, it will be converted to /*...*/-style; while a /*...*/-style comment that fits onto a single line will be converted to //-style.  If this is not to your liking, it should be easily remedied; there are function calls made to to the conversions, simply comment the call(s) out (or remove them).
+
+This function allows quick entry/editing of comments without worrying about the line-break formatting.  Once finished, simply hit 'gqc' and the comment is reformatted.
